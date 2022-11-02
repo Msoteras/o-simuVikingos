@@ -1,6 +1,271 @@
+import example.*
 
-test "testX" {
+describe "Test Vikingos y Expediciones"{
+	
+	const rollo = new Soldado(casta = jarl, cantArmas=5, vidasCobradas = 6)
+	const ragnar = new Soldado(cantArmas = 15, vidasCobradas=100, casta = karl)
+	const paris = new Capital(cantDefensores = 50, factorDeRiqueza = 10)
+	const antartida = new Aldea(cantCrucifijos = 1)
+	const expedicionParis = new Expedicion(integrantes = [ragnar], lugaresAInvadir = [paris] ) 
+	const expedicionAntartida = new Expedicion(integrantes = [rollo], lugaresAInvadir = [antartida] )
+	
+	
+	test "Un vikingo no puede subir a una expedicion"{
+		assert.throwsExceptionWithMessage(
+   			"El vikingo no puede subir a la expedicion", {expedicionParis.subirAExpedicion(rollo)})
+	}
+	
+	test "Una invasion vale la pena"{
+		assert.that(expedicionParis.valeLaPena())
+	}
+	
+	test "Una invasion no vale la pena"{
+		assert.notThat(expedicionAntartida.valeLaPena())
+	}
+	
+	test "Un vikingo escala de casta"{
+		ragnar.ascenderDeCasta()
+		assert.equals(25, ragnar.cantArmas())
+		assert.equals(thrall, ragnar.casta())
+	}
+}
 
-	assert.that(true)
+/*
+ * DIAGRAMA PUTNO 1
+ * 
+ * @startuml
+
+class Vikingo{
+casta 
+oro 
+	
+puedeIrAExpedicion() 
+	
+validarCondicionDeSubida()
+	
+}
+
+class Granjero {
+	cantHijos
+	cantHectareas
+	
+esProductivo()
+tieneArmas() 
+	
+	
+}
+
+class Soldado {
+	vidasCobradas
+cantArmas 
+	
+esProductivo() 
+tieneArmas() 
+	
+	
+}
+
+
+object jarl{
+permiteExpedicion(vikingo) 
+	
+}
+
+object karl{
+	permiteExpedicion(vikingo)
+	
+}
+
+object thrall{
+	 permiteExpedicion(vikingo)
+	
+}
+
+interface Casta{
+permiteExpedicion(vikingo)
+}
+Granjero --|> Vikingo
+Soldado --|> Vikingo
+
+jarl ..|> Casta
+karl ..|> Casta
+thrall ..|> Casta
+
+Vikingo--> Casta
+
+@enduml
+ 
+ /*
+  * PUNTO 2
+  * @startuml
+
+class Expedicion{
+	lugaresAInvadir
+	integrantes
+	
+	valeLaPena()
+	cantidadDeIntegrantes() 
+	
+}
+
+class LugaresAInvadir{
+	
+}
+
+class Aldea {
+	cantCrucifijos
+	
+	valeLaPena(cantVikingos)
+	botin(cantVikingos)
+	
+	
+}
+
+class AldeaAmurallada{
+	cantMinimaVikingos
+	
+	valeLaPena(cantVikingos) 
+}
+	
+
+class Capital {
+	cantDefensores
+	 factorDeRiqueza
+	
+	valeLaPena(cantVikingos)
+	botin(cantVikingos) 
+	defensoresDerrotados(cantVikingos) 
+}
+
+Expedicion-->"*"LugaresAInvadir 
+
+Capital--|>LugaresAInvadir
+Aldea --|>LugaresAInvadir
+AldeaAmurallada--|>Aldea
+
+
+
+
+@enduml
+  */
+  
+  /*
+   * PUNTO 4
+   * @startuml
+
+class Vikingo{
+	oro
+	cobrarVida() 
+	ganarOro(cantidad)
+}
+
+
+class Expedicion{
+	lugaresAInvadir 
+	integrantes 
+
+realizarse()
+repartirBotin(botin) 
+aumentarVidasCobradas(vidas)
+	
+}
+
+class LugaresAInvadir{
+	
+	serInvadidoPor(expedicion)
+	invadirse(expedicion)
+	botin(cantIntegrantes)
+}
+
+class Aldea {
+cantCrucifijos
+	
+botin(cantVikingos) 
+invadirse(expedicion)
+}
+
+class AldeaAmurallada {
+	
+}
+	
+
+class Capital{
+	cantDefensores
+	factorDeRiqueza
+	
+botin(cantVikingos) 
+invadirse(expedicion)
+defensoresDerrotados(cantVikingos)
+}
+
+Expedicion-->"*"LugaresAInvadir 
+
+Capital--|>LugaresAInvadir
+Aldea --|>LugaresAInvadir
+AldeaAmurallada--|>Aldea
+
+Expedicion-->"*"Vikingo
+
+LugaresAInvadir..>Expedicion
+
+@enduml
+* 
+   * 
+   * 
+   */
+   
+   /*
+    * PUNTO 5
+    * @startuml
+
+class Vikingo{
+casta 
+	
+	ascenderDeCasta() 
+	
+}
+
+class Granjero {
+	cantHijos
+	cantHectareas
+
+	brindarAscenso()
+}
+
+class Soldado{
+cantArmas 
+brindarAscenso()
 
 }
+
+interface Casta{
+ascender(vikingo)
+}
+
+object jarl{
+	
+	ascender(vikingo) 
+}
+
+object karl{
+	
+
+	
+	ascender(vikingo)
+}
+
+object thrall{
+	ascender(vikingo)
+}
+
+Granjero --|> Vikingo
+Soldado --|> Vikingo
+
+jarl ..|> Casta
+karl ..|> Casta
+thrall ..|> Casta
+
+Vikingo--> Casta
+
+@enduml
+    */
